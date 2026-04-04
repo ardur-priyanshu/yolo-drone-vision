@@ -16,4 +16,4 @@ Currently training and testing detection model in raspberry pi. Drone integratio
 Detects [what objects? people? vehicles?] from drone camera feed in real time.
 
 ## future plan
-jetson nano
+customized drone detection and building a model dataset of different real life fields
