@@ -1,19 +1,28 @@
-# YOLO Drone Vision
+# YOLO Drone Vision 🚁
 
-Integrating YOLOv8 object detection with Raspberry Pi for real-time 
-detection on a drone.
+Real-time object detection integrated with Raspberry Pi 
+mounted on a drone using YOLOv8.
 
-## Tech Used
+## 🎯 Objective
+Build an autonomous vision system that can detect objects 
+from a drone camera feed in real time.
+
+## 🛠️ Tech Stack
 - YOLOv8
 - Raspberry Pi
 - Python
 - OpenCV
+- Drone (custom built)
 
-## Status
-Currently training and testing detection model in raspberry pi. Drone integration done. And one model training completed in jupyter.
+## 📌 Current Status
+- ✅ YOLOv8 model trained on laptop
+- 🔄 Currently optimizing model for Raspberry Pi
+- 🔄 Drone integration in progress
 
-## What it does
-Detects [what objects? people? vehicles?] from drone camera feed in real time.
+## 🔭 What's Coming
+- Real time detection mid flight
+- Alert system on object detection
+- FPV camera integration
 
-## future plan
-customized drone detection and building a model dataset of different real life fields
+## 👤 Author
+Priyanshu Rudra Pal — ECE Student | Drone Developer
