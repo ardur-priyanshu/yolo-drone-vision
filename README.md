@@ -19,8 +19,7 @@
 
 This project implements a **drone detection system** capable of identifying drones in video streams and images using a custom-trained YOLOv8 model. The pipeline covers everything from dataset creation and annotation using **Label Studio**, to training, evaluation, and deployment on a **Raspberry Pi** edge device.
 
-> **Current Status:** Successfully detecting drones via phone camera feed. Raspberry Pi deployment is partially functional — currently halted due to hardware/resource constraints (see [Known Issues](#-known-issues--current-limitations)).
-
+> **Current Status:** Successfully detecting drones via phone camera feed. Raspberry Pi deployment is partially functional — currently halted due to hardware/resource constraints.
 ---
 
 ## 🗺️ Pipeline Overview
@@ -32,34 +31,6 @@ Raw Images → Label Studio Annotation → YOLO YAML Config → YOLOv8 Training 
                                                                    Raspberry Pi (⚠️ Partial)
 ```
 
----
-
-## 📁 Repository Structure
-
-```
-drone-detection/
-├── data/
-│   ├── images/
-│   │   ├── train/          # Training images
-│   │   └── val/            # Validation images
-│   ├── labels/
-│   │   ├── train/          # YOLO-format .txt label files
-│   │   └── val/
-│   └── drone.yaml          # Dataset configuration file
-├── models/
-│   └── best.pt             # Best trained model weights
-├── runs/
-│   └── detect/             # Training results, metrics, plots
-├── src/
-│   ├── train.py            # Training script
-│   ├── detect.py           # Inference script
-│   └── utils.py            # Helper functions
-├── raspberry_pi/
-│   ├── deploy.py           # Raspberry Pi deployment script
-│   └── requirements_pi.txt # Pi-specific dependencies
-├── requirements.txt
-└── README.md
-```
 
 ---
 
@@ -72,7 +43,7 @@ Images of drones were collected from various sources:
 - Open-source drone datasets
 - Screen captures from drone footage videos
 
-**Tip:** For a robust detector, aim for diversity — drones against clear sky, trees, buildings, and at various zoom levels.
+**Note:** I used Labelstudio.io
 
 ---
 
@@ -129,10 +100,6 @@ names:
   0: drone
 ```
 
-> ⚠️ Make sure your folder structure exactly matches what's defined in `drone.yaml`. Mismatches are the #1 cause of training errors.
-
----
-
 ### Step 4 — Training with YOLOv8 🏋️
 
 Training was done using **Ultralytics YOLOv8**, the latest iteration of the YOLO family.
@@ -167,8 +134,6 @@ yolo detect train \
 After training, results are saved to `runs/detect/drone_detector/`:
 - `best.pt` — Best weights (use this for inference)
 - `last.pt` — Weights from the final epoch
-- `results.png` — Loss and mAP curves
-- `confusion_matrix.png`
 
 ---
 
@@ -239,54 +204,11 @@ cap.release()
 cv2.destroyAllWindows()
 ```
 
----
-
-## ⚠️ Known Issues & Current Limitations
-
-| Issue | Details | Potential Fix |
-|-------|---------|---------------|
-| 🐢 **Slow inference on Pi** | YOLOv8n runs at ~1–3 FPS on RPi 3B | Use NCNN or TFLite export; upgrade to RPi 5 |
-| 💾 **RAM constraints** | RPi 3B has 1GB RAM; model + OpenCV is tight | Use `yolov8n` or export to ONNX/NCNN |
-| 🌡️ **Thermal throttling** | Pi overheats during extended inference | Add heatsink + fan; reduce resolution |
-| 📷 **Camera latency** | CSI camera introduces buffer delay | Use `libcamera` backend instead of OpenCV |
-
-### Optimizing for Raspberry Pi
-
-```bash
-# Export to NCNN format (fastest on ARM)
-yolo export model=best.pt format=ncnn
-
-# Or export to TFLite
-yolo export model=best.pt format=tflite int8=True
-```
-
-Then load the optimized model:
-```python
-model = YOLO("best_ncnn_model")  # Auto-detects NCNN format
-```
-
----
-
-## 📊 Model Performance
-
-| Metric | Value |
-|--------|-------|
-| mAP@0.5 | — (add your value) |
-| mAP@0.5:0.95 | — |
-| Precision | — |
-| Recall | — |
-| Inference Speed (CPU) | — ms/frame |
-| Inference Speed (Pi 4) | ~ 1–3 FPS |
-
-> Results will be updated as training is refined.
-
----
-
 ## 🚀 Quickstart
 
 ```bash
 # Clone the repo
-git clone https://github.com/<your-username>/drone-detection.git
+git clone https://github.com/<ardur-priyanshu>/yolo-drone-vision.git
 cd drone-detection
 
 # Install dependencies
@@ -306,13 +228,9 @@ python src/detect.py --source 0 --weights models/best.pt
 - [x] Collect and annotate drone dataset using Label Studio
 - [x] Configure YOLO YAML and train YOLOv8 model
 - [x] Validate real-time detection via phone camera
-- [ ] Optimize model for Raspberry Pi (NCNN / TFLite export)
+- [-] Optimize model for Raspberry Pi (NCNN / TFLite export)
 - [ ] Achieve stable real-time inference on Raspberry Pi 4
-- [ ] Add tracking (ByteTrack / BoTSORT) for multi-drone scenarios
-- [ ] Integrate GPS coordinates estimation from bounding box size
-- [ ] Build a web dashboard for remote monitoring
-- [ ] Explore stereo vision for distance estimation
-
+- [ ] 
 ---
 
 ## 🛠️ Tech Stack
@@ -335,21 +253,3 @@ python src/detect.py --source 0 --weights models/best.pt
 - [YOLO Label Format Specification](https://docs.ultralytics.com/datasets/detect/)
 
 ---
-
-## 👤 Author
-
-**Your Name**
-- GitHub: [@your-username](https://github.com/your-username)
-- Location: Tripura, India 🇮🇳
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">
-  Built with 🔥 from scratch — from annotation to edge deployment
-</p>
